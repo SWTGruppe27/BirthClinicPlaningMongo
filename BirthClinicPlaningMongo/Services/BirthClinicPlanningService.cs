@@ -2,13 +2,13 @@ using System;
 using BirthClinicPlanningMongo.Models;
 using BirthClinicPlanningMongo.Models.Employee;
 using BirthClinicPlanningMongo.Models.Rooms;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace BirthClinicPlanningMongo.Services
 {
     public class BirthClinicPlanningService
     {
-        //private IMongoCollection<Book> _books;
         private readonly string ConnectionString = "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false";
         private readonly string BirthClinicPlanningDb = "BirthClinicPlanningDB";
         private const string BirthCollection = "Birth";
@@ -31,7 +31,6 @@ namespace BirthClinicPlanningMongo.Services
             _reservations = database.GetCollection<Reservation>(ReservationCollection);
             _rooms = database.GetCollection<Room>(RoomCollection);
             _employees = database.GetCollection<Employee>(EmployeeCollection);
-            Console.WriteLine("test");
         }
 
         //  public List<Book> Get()
