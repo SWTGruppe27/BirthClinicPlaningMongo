@@ -1,12 +1,12 @@
-﻿using System;
+﻿using BirthClinicPlanningMongo.Services;
 
-namespace BirthClinicPlaningMongo
+namespace BirthClinicPlanningMongo
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            BirthClinicPlanningService b1 = new BirthClinicPlanningService();
         }
     }
 }
