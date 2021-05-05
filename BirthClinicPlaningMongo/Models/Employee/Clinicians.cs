@@ -7,7 +7,7 @@ namespace BirthClinicPlanningMongo.Models.Employee
     {
         public string Position { get; set; }
         public ObjectId BirthRoomId { get; set; }
-        public List<ObjectId> WorksList  { get; set; }
+        public List<ObjectId> BirthList  { get; set; }
 
         protected Clinicians()
         {

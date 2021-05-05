@@ -13,7 +13,7 @@ namespace BirthClinicPlanningMongo.Models
         public DateTime PlannedStartDate { get; set; }
         public DateTime PlannedEndDate { get; set; }
         public List<ObjectId> ReservationList { get; set; }
-        public List<ObjectId> WorksList { get; set; }
+        public List<ObjectId> EmployeeList { get; set; }
         public List<Child> ChildList { get; set; }
         public List<Relatives.Relatives> RelativesList { get; set; }
     }
