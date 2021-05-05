@@ -7,10 +7,13 @@ namespace BirthClinicPlanningMongo
     {
         static void Main(string[] args)
         {
-            BirthClinicPlanningService b1 = new BirthClinicPlanningService();
-            MongoDbInsertData mongoDbInsert = new MongoDbInsertData(b1);
+            BirthClinicPlanningService birthClinicPlanningService = new BirthClinicPlanningService();
+            MongoDbInsertData mongoDbInsert = new MongoDbInsertData(birthClinicPlanningService);
+            MongoDbSearch mongoDbSearch = new MongoDbSearch(birthClinicPlanningService);
 
-            mongoDbInsert.NewBirth();
+            //mongoDbInsert.NewBirth();
+
+            mongoDbSearch.ShowPlannedBirths();
 
             bool running = true;
 

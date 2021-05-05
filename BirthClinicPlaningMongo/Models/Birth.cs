@@ -7,6 +7,14 @@ namespace BirthClinicPlanningMongo.Models
 {
     public class Birth
     {
+        public Birth()
+        {
+            EmployeeList = new List<ObjectId>();
+            ChildList = new List<Child>();
+            RelativesList = new List<Relatives.Relatives>();
+            ReservationList = new List<ObjectId>();
+        }
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string BirthId { get; set; }

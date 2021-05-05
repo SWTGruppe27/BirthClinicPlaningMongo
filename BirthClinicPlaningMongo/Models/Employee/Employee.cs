@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using System.Collections.Generic;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace BirthClinicPlanningMongo.Models.Employee
@@ -11,6 +12,9 @@ namespace BirthClinicPlanningMongo.Models.Employee
         public int EmployeeNumber { get; set; }
         public string Title { get; set; } //Secretarie og clinician
         public string FullName { get; set; }
+        public string Position { get; set; }
+        public ObjectId BirthRoomId { get; set; }
+        public List<ObjectId> BirthList { get; set; }
 
         protected Employee()
         {

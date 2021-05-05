@@ -55,10 +55,13 @@ namespace BirthClinicPlanningMongo
                 {
                     Console.WriteLine($"Vælg et ledig personale: ");
                     //dbSearch.ShowAvaliableClinciansAndRoomsForNextFiveDays();
-                    //Employee eml = new Doctors();
-                    //eml =  _mongoDb.Employees.Find(Builders<Employee>.Filter.Empty).Single();
 
-                    //Console.WriteLine(eml.FullName);
+                    List<Employee> eml = _mongoDb.Employees.Find(Builders<Employee>.Filter.Empty).ToList();
+
+                    foreach (var employee in eml)
+                    {
+                        Console.WriteLine(employee.FullName);
+                    }
 
                     Console.WriteLine("Indtast et Id på et ledig personale");
                     int choice4 = int.Parse(Console.ReadLine());

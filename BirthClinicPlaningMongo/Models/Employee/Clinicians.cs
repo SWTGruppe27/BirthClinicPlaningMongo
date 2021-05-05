@@ -5,10 +5,6 @@ namespace BirthClinicPlanningMongo.Models.Employee
 {
     public abstract class Clinicians : Employee
     {
-        public string Position { get; set; }
-        public ObjectId BirthRoomId { get; set; }
-        public List<ObjectId> BirthList  { get; set; }
-
         protected Clinicians()
         {
         }
