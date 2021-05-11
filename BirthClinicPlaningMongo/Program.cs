@@ -10,6 +10,7 @@ namespace BirthClinicPlanningMongo
             BirthClinicPlanningService birthClinicPlanningService = new BirthClinicPlanningService();
             MongoDbInsertData mongoDbInsert = new MongoDbInsertData(birthClinicPlanningService);
             MongoDbSearch mongoDbSearch = new MongoDbSearch(birthClinicPlanningService);
+            MongoDbAlterData mongoDbAlter = new MongoDbAlterData(birthClinicPlanningService);
 
             bool running = true;
 
@@ -53,28 +54,28 @@ namespace BirthClinicPlanningMongo
 
                     case 5:
                         Console.WriteLine("Indtast fødsels id:");
-                        int id1 = int.Parse(Console.ReadLine());
+                        string id1 = Console.ReadLine();
                         Console.WriteLine("");
-                        //dbSearch.ShowReservedRooms(id1);
+                        mongoDbSearch.ShowReservedRooms(id1);
                         break;
 
                     case 6:
                         Console.WriteLine("Indtast fødsels id:");
-                        int id2 = int.Parse(Console.ReadLine());
+                        string id2 = Console.ReadLine();
                         Console.WriteLine("");
-                        //dbSearch.ShowCliniciansAssignedBirths(id2);
+                        mongoDbSearch.ShowCliniciansAssignedBirths(id2);
                         break;
 
                     case 7:
                         Console.WriteLine("Indtast fødsels id:");
-                        int id3 = int.Parse(Console.ReadLine());
-                        //dbAlter.EndBirth(id3);
+                        string id3 = Console.ReadLine();
+                        mongoDbAlter.EndBirth(id3);
                         break;
 
                     case 8:
-                        Console.WriteLine("Indtast reservations id:");
-                        int id4 = int.Parse(Console.ReadLine());
-                        //dbAlter.CancelReservation(id4);
+                        Console.WriteLine("Indtast fødsels id:");
+                        string id4 = Console.ReadLine();
+                        mongoDbAlter.CancelReservation(id4);
                         break;
 
                     case 9:

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BirthClinicPlanningMongo.Models;
 using BirthClinicPlanningMongo.Models.Employee;
+using BirthClinicPlanningMongo.Models.Relatives;
 using BirthClinicPlanningMongo.Models.Rooms;
 using BirthClinicPlanningMongo.Services;
 using MongoDB.Bson;
@@ -14,11 +15,11 @@ namespace BirthClinicPlanningMongo
 {
     public class MongoDbInsertData
     {
-        private BirthClinicPlanningService _mongoDb;
+        private BirthClinicPlanningService _birthClinicPlanningService;
 
-        public MongoDbInsertData(BirthClinicPlanningService mongoDb)
+        public MongoDbInsertData(BirthClinicPlanningService birthClinicPlanningService)
         {
-            _mongoDb = mongoDb;
+            _birthClinicPlanningService = birthClinicPlanningService;
         }
 
         public void NewBirth()
@@ -37,7 +38,7 @@ namespace BirthClinicPlanningMongo
 
             Console.WriteLine(
                 $"Vælg et fødselserum mellem {getListOfRooms.ElementAt(1) + getListOfRooms.ElementAt(2) + 1} og {getListOfRooms.ElementAt(0) + getListOfRooms.ElementAt(1) + getListOfRooms.ElementAt(2)}: ");
-            
+
             int choice3 = int.Parse(Console.ReadLine());
 
             newBirth.RoomNumber = choice3;
@@ -52,11 +53,11 @@ namespace BirthClinicPlanningMongo
                     Console.WriteLine($"Vælg et ledig personale: ");
                     //dbSearch.ShowAvaliableClinciansAndRoomsForNextFiveDays();
 
-                    List<Employee> eml = _mongoDb.Employees.Find(Builders<Employee>.Filter.Empty).ToList();
+                    List<Employee> eml = _birthClinicPlanningService.Employees.Find(Builders<Employee>.Filter.Empty).ToList();
 
                     foreach (var employee in eml)
                     {
-                        Console.WriteLine(employee.FullName);
+                        Console.WriteLine($"id: {employee.EmployeeId} navn: {employee.FullName}");
                     }
 
                     Console.WriteLine("Indtast et Id på et ledig personale");
@@ -65,11 +66,9 @@ namespace BirthClinicPlanningMongo
 
                     var filterEmployee = Builders<Employee>.Filter.Where(e => e.EmployeeNumber == choice4);
 
-                    Employee em = _mongoDb.Employees.Find(filterEmployee).Single();
+                    Employee em = _birthClinicPlanningService.Employees.Find(filterEmployee).Single();
 
                     newBirth.EmployeeList.Add(ObjectId.Parse(em.EmployeeId));
-
-                    
                 }
                 else
                 {
@@ -77,7 +76,30 @@ namespace BirthClinicPlanningMongo
                 }
             }
 
-            _mongoDb.Births.InsertOne(newBirth);
+            Console.WriteLine("Indtast m for mor og f for far");
+            Relatives r1;
+
+            string choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "m":
+                    Console.WriteLine("Indtast navn:");
+                    r1 = new Mother(Console.ReadLine());
+                    break;
+                case "f":
+                    Console.WriteLine("Indtast navn:");
+                    r1 = new Father(Console.ReadLine());
+                    break;
+                default:
+                    Console.WriteLine("Indtast navn:");
+                    r1 = new Family(Console.ReadLine());
+                    break;
+            }
+
+            newBirth.RelativesList.Add(r1);
+
+            _birthClinicPlanningService.Births.InsertOne(newBirth);
         }
 
         private static DateTime ReservationDate()
@@ -135,7 +157,7 @@ namespace BirthClinicPlanningMongo
 
             int choice1 = int.Parse(Console.ReadLine());
             Reservation newReservation = new Reservation();
-           
+
             Console.WriteLine($"Vælg en start dato for din reservation.");
             newReservation.ReservationStartDate = ReservationDate();
 
@@ -144,15 +166,30 @@ namespace BirthClinicPlanningMongo
 
             var filterRooms = Builders<Room>.Filter.Where(e => e.RoomNumber == choice1);
 
-            Room room = _mongoDb.Rooms.Find(filterRooms).Single();
+            Room room = _birthClinicPlanningService.Rooms.Find(filterRooms).Single();
 
             room.ReservationList.Add(newReservation);
 
-            //var update = Builders<Room>.Update.AddToSet(newReservation);
+            Console.WriteLine("Vælg et fødselsId som skal have en reservation");
 
+            var birthList = _birthClinicPlanningService.Births.Find(Builders<Birth>.Filter.Empty).ToList();
+
+            foreach (var birth in birthList)
+            {
+                Console.WriteLine($"Id: {birth.BirthId}");
+            }
+
+            string id = Console.ReadLine();
+
+            var filterBirth = Builders<Birth>.Filter.Where(b => b.BirthId == id);
+
+            var updateBirth = Builders<Birth>.Update.Push(r => r.ReservedRooms, ObjectId.Parse(room.RoomId));
+
+            _birthClinicPlanningService.Births.UpdateOne(filterBirth, updateBirth);
+            
             var update = Builders<Room>.Update.Push(r => r.ReservationList, newReservation);
 
-            _mongoDb.Rooms.UpdateOne(filterRooms, update);
+            _birthClinicPlanningService.Rooms.UpdateOne(filterRooms, update);
         }
 
         public List<long> GetNumberOfRooms()
@@ -165,9 +202,9 @@ namespace BirthClinicPlanningMongo
             var filterMaternityRoom = Builders<Room>.Filter.Where(r => r.Type == "MaternityRoom");
             var filterRestRoom4HoursRoom = Builders<Room>.Filter.Where(r => r.Type == "RestRoom4Hours");
 
-            numberOfBirthRoomsRooms = _mongoDb.Rooms.CountDocuments(filterBirthRoom);
-            numberOfMaternityRooms = _mongoDb.Rooms.CountDocuments(filterMaternityRoom);
-            numberOfRestRoom4HoursRooms = _mongoDb.Rooms.CountDocuments(filterRestRoom4HoursRoom);
+            numberOfBirthRoomsRooms = _birthClinicPlanningService.Rooms.CountDocuments(filterBirthRoom);
+            numberOfMaternityRooms = _birthClinicPlanningService.Rooms.CountDocuments(filterMaternityRoom);
+            numberOfRestRoom4HoursRooms = _birthClinicPlanningService.Rooms.CountDocuments(filterRestRoom4HoursRoom);
 
             List<long> listOfRooms = new List<long>();
 

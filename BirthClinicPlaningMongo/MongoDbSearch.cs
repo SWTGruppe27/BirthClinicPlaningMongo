@@ -149,33 +149,70 @@ namespace BirthClinicPlanningMongo
                                               $"\nStart dato: {reservation.ReservationStartDate}" +
                                               $"\nSlut dato: {reservation.ReservationEndDate}\n");
 
-                            Birth birth = _birthClinicPlanningService.Births
-                                .Find(Builders<Birth>.Filter.Where(b => b.RoomNumber == room.RoomNumber)).Single();
+                            var birthList = _birthClinicPlanningService.Births.Find(Builders<Birth>.Filter.Empty).ToList();
 
-                            foreach (var child in birth.ChildList)
+                            foreach (var birth in birthList)
                             {
-                                Console.WriteLine($"Barn Id: {child.ChildId} " +
-                                                  $"\nCpr nummer: { child.CprNumber}");
-                            }
+                                foreach (var objectId in birth.ReservedRooms)
+                                {
+                                    if (objectId.ToString() == room.RoomId)
+                                    {
+                                        foreach (var child in birth.ChildList)
+                                        {
+                                            Console.WriteLine($"Barn Id: {child.ChildId} " +
+                                                              $"\nCpr nummer: { child.CprNumber}");
+                                        }
 
-                            foreach (var relatives in birth.RelativesList)
-                            {
-                                Console.WriteLine($"Relation: {relatives.Relation}" +
-                                                  $"\nNavn: { relatives.FullName}");
+                                        foreach (var relatives in birth.RelativesList)
+                                        {
+                                            Console.WriteLine($"Relation: {relatives.Relation}" +
+                                                              $"\nNavn: { relatives.FullName}");
+                                        }
+                                    }
+                                }
                             }
 
                         }
                     }
                 }
-
-
                 Console.WriteLine();
+            }
+        }
+
+        public void ShowReservedRooms(string id)
+        {
+            Birth birth = _birthClinicPlanningService.Births.Find(Builders<Birth>.Filter.Where(b => b.BirthId == id)).Single();
+
+            foreach (var objectId in birth.ReservedRooms)
+            {
+                Room room = FindRoomById(objectId);
+                Console.WriteLine($"Rumnummer: {room.RoomNumber} \nRum type: {room.RoomType}");
+            }
+
+        }
+
+        public void ShowCliniciansAssignedBirths(string id)
+        {
+            Birth birth = _birthClinicPlanningService.Births.Find(Builders<Birth>.Filter.Where(b => b.BirthId == id)).Single();
+
+            foreach (var objectId in birth.EmployeeList)
+            {
+                Employee employee = FindEmployeeById(objectId);
+
+                Console.WriteLine($"Medarbejdernummer: {employee.EmployeeNumber} " +
+                                  $"\nNavn: {employee.FullName} " +
+                                  $"\nPosition: {employee.Position}");
             }
         }
 
         private Employee FindEmployeeById(ObjectId employeeId)
         {
             return _birthClinicPlanningService.Employees.Find(Builders<Employee>.Filter.Where(e => e.EmployeeId == employeeId.ToString())).Single();
+        }
+
+        private Room FindRoomById(ObjectId roomId)
+        {
+            return _birthClinicPlanningService.Rooms.Find(Builders<Room>.Filter.Where(r => r.RoomId == roomId.ToString())).Single();
         }
     }
 }

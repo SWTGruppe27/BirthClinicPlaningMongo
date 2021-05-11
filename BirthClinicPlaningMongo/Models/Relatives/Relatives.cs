@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace BirthClinicPlanningMongo.Models.Relatives
 {
-    public abstract class Relatives
+    public class Relatives
     {
         protected Relatives()
         {
@@ -20,6 +20,6 @@ namespace BirthClinicPlanningMongo.Models.Relatives
         public string RelativesId { get; set; }
         public string FullName { get; set; }
         public string Relation { get; set; }
-        public List<ObjectId> ReservationList { get; set; }
+        public string CPRNumber { get; set; }
     }
 }

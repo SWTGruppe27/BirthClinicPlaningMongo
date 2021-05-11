@@ -10,7 +10,5 @@
         {
             Relation = "Father";
         }
-
-        public string CPRNumber { get; set; }
     }
 }

@@ -12,6 +12,7 @@ namespace BirthClinicPlanningMongo.Models
             EmployeeList = new List<ObjectId>();
             ChildList = new List<Child>();
             RelativesList = new List<Relatives.Relatives>();
+            ReservedRooms = new List<ObjectId>();
         }
 
         [BsonId]
@@ -20,6 +21,7 @@ namespace BirthClinicPlanningMongo.Models
         public DateTime PlannedStartDate { get; set; }
         public DateTime PlannedEndDate { get; set; }
         public int RoomNumber { get; set; }
+        public List<ObjectId> ReservedRooms { get; set; }
         public List<ObjectId> EmployeeList { get; set; }
         public List<Child> ChildList { get; set; }
         public List<Relatives.Relatives> RelativesList { get; set; }
