@@ -10,12 +10,6 @@ namespace BirthClinicPlanningMongo
             BirthClinicPlanningService birthClinicPlanningService = new BirthClinicPlanningService();
             MongoDbInsertData mongoDbInsert = new MongoDbInsertData(birthClinicPlanningService);
             MongoDbSearch mongoDbSearch = new MongoDbSearch(birthClinicPlanningService);
-            
-            //mongoDbInsert.MakeReservation();
-
-            //mongoDbInsert.NewBirth();
-
-            //mongoDbSearch.ShowPlannedBirths();
 
             bool running = true;
 
@@ -84,7 +78,7 @@ namespace BirthClinicPlanningMongo
                         break;
 
                     case 9:
-                        //NewBirth(dbSearch);
+                        mongoDbInsert.NewBirth();
                         break;
 
                     case 10:
