@@ -13,16 +13,17 @@ namespace BirthClinicPlanningMongo.Models.Employee
         public string Title { get; set; } //Secretarie og clinician
         public string FullName { get; set; }
         public string Position { get; set; }
-        public ObjectId BirthRoomId { get; set; }
         public List<ObjectId> BirthList { get; set; }
 
         protected Employee()
         {
+            BirthList = new List<ObjectId>();
         }
 
         protected Employee(string name)
         {
             FullName = name;
+            BirthList = new List<ObjectId>();
         }
     }
 }

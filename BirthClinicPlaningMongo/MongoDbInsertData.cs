@@ -66,6 +66,8 @@ namespace BirthClinicPlanningMongo
                     Employee em = _mongoDb.Employees.Find(filterEmployee).Single();
 
                     newBirth.EmployeeList.Add(ObjectId.Parse(em.EmployeeId));
+
+                    
                 }
                 else
                 {

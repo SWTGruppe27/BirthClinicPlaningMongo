@@ -46,7 +46,7 @@ namespace BirthClinicPlanningMongo
                         break;
 
                     case 2:
-                        //mongoDbSearch.ShowAvaliableClinciansAndRoomsForNextFiveDays();
+                        mongoDbSearch.ShowAvaliableClinciansAndRoomsForNextFiveDays();
                         break;
 
                     case 3:

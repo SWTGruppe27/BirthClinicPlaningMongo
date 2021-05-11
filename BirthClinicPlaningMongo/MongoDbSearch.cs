@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BirthClinicPlanningMongo.Models;
+using BirthClinicPlanningMongo.Models.Employee;
 using BirthClinicPlanningMongo.Models.Rooms;
 using BirthClinicPlanningMongo.Services;
 using MongoDB.Driver;
@@ -21,7 +22,6 @@ namespace BirthClinicPlanningMongo
 
         public void ShowPlannedBirths()
         {
-
             var birthList = _birthClinicPlanningService.Births.Find(Builders<Birth>.Filter.Empty).ToList();
 
             foreach (var birth in birthList)
@@ -38,55 +38,56 @@ namespace BirthClinicPlanningMongo
             Console.WriteLine();
         }
 
-        //public void ShowAvaliableClinciansAndRoomsForNextFiveDays()
-        //{
-            //var builder = Builders<Room>.Filter;
+        public void ShowAvaliableClinciansAndRoomsForNextFiveDays()
+        {
+            List<Room> rooms = _birthClinicPlanningService.Rooms.Find(Builders<Room>.Filter.Empty).ToList();
 
-            //var filterRooms = Builders<Room>.Filter.Where(r => r.ReservationList.Count == 0 || r.ReservationList.TrueForAll(r => r.ReservationStartDate >= DateTime.Now.AddDays(4)));
+            bool reserved = false;
 
-            //var test 3 =
-            //    builder.Gte(r => r.ReservationList.TrueForAll(r => r.ReservationStartDate >= DateTime.Now.AddDays(4)));   //FILTERET VIRKER IKKE MED STØRRE ELLER LIG MED TEGN
+            foreach (var room in rooms)
+            {
+                if (room.ReservationList.Count == 0)
+                {
+                    Console.WriteLine($"RumNummer: {room.RoomNumber} " +
+                                      $"\nType rum: {room.RoomType} ");
+                }
+
+                foreach (var reservation in room.ReservationList)
+                {
+                    if (reservation.ReservationStartDate >= DateTime.Now.AddDays(4))
+                    {
+                        reserved = false;
+                    }
+                    else
+                    {
+                        reserved = true;
+                    }
+                }
+
+                if (reserved == false)
+                {
+                    Console.WriteLine($"RumNummer: {room.RoomNumber} " +
+                                      $"\nType rum: {room.RoomType} ");
+                }
+            }
 
 
-            //var test2 = builder.Gte(r => r.ReservationStartDate, DateTime.Now.AddDays(4));
+            var birthFilter = Builders<Birth>.Filter.Gte(b => b.PlannedStartDate, DateTime.Now.AddDays(4));
 
-            //var test = builder.Or(r => r.ReservationList.Count == 0, r.ReservationList.TrueForAll(builder.Gte(r => r.ReservationStartDate, DateTime.Now.AddDays(4)))));
+            var birthList = _birthClinicPlanningService.Births.Find(birthFilter).ToList();
 
-            //var filterRooms = Builders<Room>.Filter.Where(builder.Or(r => r.ReservationList.Count == 0,
-            //    r.ReservationList.TrueForAll(builder.Gte(r => r.ReservationStartDate, DateTime.Now.AddDays(4)))));
+            foreach (var birth in birthList)
+            {
+                foreach (var objectId in birth.EmployeeList)
+                {
+                    var employee = _birthClinicPlanningService.Employees.Find(
+                        Builders<Employee>.Filter.Where(e => e.EmployeeId == objectId.ToString())).Single();
 
-            //List<Room> listOfRooms = _birthClinicPlanningService.Rooms.Find(filterRooms).ToList();
-
-        //    //var test = Builders<Room>.Filter.Gte(x => x.ReservationList.ToA, 14);
-
-
-        //    List<Room> listOfRooms = _birthClinicPlanningService.Rooms.Find(test).ToList();
-
-
-        //    foreach (var VARIABLE in listOfRooms)
-        //    {
-        //        Console.WriteLine(VARIABLE.RoomNumber);
-        //    }
-        //}
-
-        ////    builder.
-            //    foreach (var room in listOfRooms)
-            //    {
-            //        Console.WriteLine($"RumNummer: {room.RoomNumber} " +
-            //                          $"\nType rum: {room.RoomType} ");
-            //    }
-
-            //    Console.WriteLine();
-
-            //var cliniciansList = _birthClinicPlanningService.Clinicians
-            //    .Include(c => c.WorksList)
-            //    .ThenInclude(w => w.Birth)
-            //    .Where(c => c.BirthRoomId == 0);
-
-            //foreach (var clinician in cliniciansList)
-            //{
-            //    Console.WriteLine($"Medarbejder id: {clinician.EmployeeId} \nTitel: {clinician.Position}");
-            //}
-
+                    Console.WriteLine($"Medarbejder id: {employee.EmployeeNumber} \nTitel: {employee.Position}");
+                }
+               
+            }
         }
+
+    }
     }
