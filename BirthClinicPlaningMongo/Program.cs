@@ -44,11 +44,11 @@ namespace BirthClinicPlanningMongo
                         break;
 
                     case 3:
-                        //dbSearch.ShowInfoAboutOngoingBirths();
+                        mongoDbSearch.ShowInfoAboutOngoingBirths();
                         break;
 
                     case 4:
-                        //dbSearch.ShowInfoAboutRestRoomsInUse();
+                        mongoDbSearch.ShowInfoAboutRestRoomsInUse();
                         break;
 
                     case 5:

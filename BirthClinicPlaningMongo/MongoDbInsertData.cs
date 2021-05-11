@@ -40,6 +40,8 @@ namespace BirthClinicPlanningMongo
             
             int choice3 = int.Parse(Console.ReadLine());
 
+            newBirth.RoomNumber = choice3;
+
             bool notDone = true;
 
             while (notDone)
@@ -104,8 +106,6 @@ namespace BirthClinicPlanningMongo
 
             while (notTrue)
             {
-                
-
                 string choice = Console.ReadLine();
 
                 switch (choice)
