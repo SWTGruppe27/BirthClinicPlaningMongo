@@ -36,7 +36,7 @@ namespace BirthClinicPlanningMongo
                 switch (int.Parse(input))
                 {
                     case 1:
-                        //dbSearch.ShowPlannedBirths();
+                        mongoDbSearch.ShowPlannedBirths();
                         break;
 
                     case 2:
