@@ -21,7 +21,7 @@ namespace BirthClinicPlanningMongo
 
         public void ShowPlannedBirths()
         {
-            
+
             var birthList = _birthClinicPlanningService.Births.Find(Builders<Birth>.Filter.Empty).ToList();
 
             foreach (var birth in birthList)
@@ -40,32 +40,43 @@ namespace BirthClinicPlanningMongo
 
         //public void ShowAvaliableClinciansAndRoomsForNextFiveDays()
         //{
-        //    var builder = Builders<Room>.Filter;
+            //var builder = Builders<Room>.Filter;
 
-        //    var filterRooms = Builders<Room>.Filter.Where(r => r.ReservationList.Count == 0 ||r.ReservationList.TrueForAll(r => r.ReservationStartDate >= DateTime.Now.AddDays(4)));
+            //var filterRooms = Builders<Room>.Filter.Where(r => r.ReservationList.Count == 0 || r.ReservationList.TrueForAll(r => r.ReservationStartDate >= DateTime.Now.AddDays(4)));
 
-        //    var test 3 =
-        //        builder.Gte(r => r.ReservationList.TrueForAll(r => r.ReservationStartDate >= DateTime.Now.AddDays(4)));   //FILTERET VIRKER IKKE MED STØRRE ELLER LIG MED TEGN
+            //var test 3 =
+            //    builder.Gte(r => r.ReservationList.TrueForAll(r => r.ReservationStartDate >= DateTime.Now.AddDays(4)));   //FILTERET VIRKER IKKE MED STØRRE ELLER LIG MED TEGN
 
 
-        //    var test2 = builder.Gte(r => r.ReservationStartDate, DateTime.Now.AddDays(4));
+            //var test2 = builder.Gte(r => r.ReservationStartDate, DateTime.Now.AddDays(4));
 
-        //    var test = builder.Or(r => r.ReservationList.Count == 0,
-        //        r.ReservationList.TrueForAll(builder.Gte(r => r.ReservationStartDate, DateTime.Now.AddDays(4)))));
+            //var test = builder.Or(r => r.ReservationList.Count == 0, r.ReservationList.TrueForAll(builder.Gte(r => r.ReservationStartDate, DateTime.Now.AddDays(4)))));
 
-        //    var filterRooms = Builders<Room>.Filter.Where(builder.Or(r => r.ReservationList.Count == 0,
-        //        r.ReservationList.TrueForAll( builder.Gte(r => r.ReservationStartDate, DateTime.Now.AddDays(4)))));
+            //var filterRooms = Builders<Room>.Filter.Where(builder.Or(r => r.ReservationList.Count == 0,
+            //    r.ReservationList.TrueForAll(builder.Gte(r => r.ReservationStartDate, DateTime.Now.AddDays(4)))));
 
-        //    List<Room> listOfRooms = _birthClinicPlanningService.Rooms.Find(filterRooms).ToList();
+            //List<Room> listOfRooms = _birthClinicPlanningService.Rooms.Find(filterRooms).ToList();
 
-        //    builder.
-        //    foreach (var room in listOfRooms)
+        //    //var test = Builders<Room>.Filter.Gte(x => x.ReservationList.ToA, 14);
+
+
+        //    List<Room> listOfRooms = _birthClinicPlanningService.Rooms.Find(test).ToList();
+
+
+        //    foreach (var VARIABLE in listOfRooms)
         //    {
-        //        Console.WriteLine($"RumNummer: {room.RoomNumber} " +
-        //                          $"\nType rum: {room.RoomType} ");
+        //        Console.WriteLine(VARIABLE.RoomNumber);
         //    }
+        //}
 
-        //    Console.WriteLine();
+        ////    builder.
+            //    foreach (var room in listOfRooms)
+            //    {
+            //        Console.WriteLine($"RumNummer: {room.RoomNumber} " +
+            //                          $"\nType rum: {room.RoomType} ");
+            //    }
+
+            //    Console.WriteLine();
 
             //var cliniciansList = _birthClinicPlanningService.Clinicians
             //    .Include(c => c.WorksList)
@@ -79,4 +90,3 @@ namespace BirthClinicPlanningMongo
 
         }
     }
-}

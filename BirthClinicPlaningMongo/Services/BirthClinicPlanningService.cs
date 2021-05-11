@@ -31,8 +31,21 @@ namespace BirthClinicPlanningMongo.Services
             Rooms = database.GetCollection<Room>(RoomCollection);
             Employees = database.GetCollection<Employee>(EmployeeCollection);
 
-            //SeedEmployees(Employees);
-            //SeedRooms(Rooms);
+            var filterRoom = Builders<Room>.Filter.Empty;
+            long numberOfRooms = Rooms.CountDocuments(filterRoom);
+
+            if(numberOfRooms == 0)
+            {
+                SeedRooms(Rooms);
+            }
+
+            var filterEmployees = Builders<Employee>.Filter.Empty;
+            long numberOfEmployees = Employees.CountDocuments(filterEmployees);
+
+            if (numberOfEmployees == 0)
+            {
+                SeedEmployees(Employees);
+            }
         }
 
         private void SeedEmployees(IMongoCollection<Employee> collection)
