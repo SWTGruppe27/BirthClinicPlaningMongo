@@ -53,29 +53,19 @@ namespace BirthClinicPlanningMongo
                         break;
 
                     case 5:
-                        Console.WriteLine("Indtast fødsels id:");
-                        string id1 = Console.ReadLine();
-                        Console.WriteLine("");
-                        mongoDbSearch.ShowReservedRooms(id1);
+                        mongoDbSearch.ShowReservedRooms();
                         break;
 
                     case 6:
-                        Console.WriteLine("Indtast fødsels id:");
-                        string id2 = Console.ReadLine();
-                        Console.WriteLine("");
-                        mongoDbSearch.ShowCliniciansAssignedBirths(id2);
+                        mongoDbSearch.ShowCliniciansAssignedBirths();
                         break;
 
                     case 7:
-                        Console.WriteLine("Indtast fødsels id:");
-                        string id3 = Console.ReadLine();
-                        mongoDbAlter.EndBirth(id3);
+                        mongoDbAlter.EndBirth();
                         break;
 
                     case 8:
-                        Console.WriteLine("Indtast fødsels id:");
-                        string id4 = Console.ReadLine();
-                        mongoDbAlter.CancelReservation(id4);
+                        mongoDbAlter.CancelReservation();
                         break;
 
                     case 9:

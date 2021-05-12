@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using BirthClinicPlanningMongo.Models;
 using BirthClinicPlanningMongo.Models.Employee;
 using BirthClinicPlanningMongo.Models.Rooms;
@@ -24,17 +21,17 @@ namespace BirthClinicPlanningMongo
 
         public void ShowPlannedBirths()
         {
-            var birthList = _birthClinicPlanningService.Births.Find(Builders<Birth>.Filter.Empty).ToList();
+            var birthFilter1 = Builders<Birth>.Filter.Lte(b => b.PlannedStartDate, DateTime.Now.AddDays(2));
+
+            var birthFilter2 = Builders<Birth>.Filter.Gt(b => b.PlannedEndDate, DateTime.Now);
+
+            var birthList = _birthClinicPlanningService.Births.Find(birthFilter1 & birthFilter2).ToList();
 
             foreach (var birth in birthList)
             {
-                if (birth.PlannedStartDate.Date == DateTime.Now.Date || birth.PlannedStartDate.Date == DateTime.Now.Date.AddDays(1) ||
-                    birth.PlannedStartDate.Date == DateTime.Now.Date.AddDays(2) && birth.PlannedEndDate! > DateTime.Now)
-                {
-                    Console.WriteLine($"\nFødsels id: {birth.BirthId}");
-                    Console.WriteLine($"Planlagt start tid: { birth.PlannedStartDate.ToLocalTime()}");
-                    Console.WriteLine($"Planlagt slut tid: {birth.PlannedEndDate.ToLocalTime()}");
-                }
+                Console.WriteLine($"\nFødsels id: {birth.BirthId}");
+                Console.WriteLine($"Planlagt start tid: { birth.PlannedStartDate.ToLocalTime()}");
+                Console.WriteLine($"Planlagt slut tid: {birth.PlannedEndDate.ToLocalTime()}");
             }
 
             Console.WriteLine();
@@ -171,7 +168,6 @@ namespace BirthClinicPlanningMongo
                                     }
                                 }
                             }
-
                         }
                     }
                 }
@@ -179,21 +175,32 @@ namespace BirthClinicPlanningMongo
             }
         }
 
-        public void ShowReservedRooms(string id)
+        public void ShowReservedRooms()
         {
-            Birth birth = _birthClinicPlanningService.Births.Find(Builders<Birth>.Filter.Where(b => b.BirthId == id)).Single();
+            List<Birth> list = PrintAllBirths();
+
+            Console.WriteLine("Indtast fødsels nummer:");
+            int id = int.Parse(Console.ReadLine());
+
+            Birth birth = _birthClinicPlanningService.Births.Find(Builders<Birth>.Filter.Where(b => b.BirthId == list.ElementAt(id).BirthId)).Single();
 
             foreach (var objectId in birth.ReservedRooms)
             {
                 Room room = FindRoomById(objectId);
                 Console.WriteLine($"Rumnummer: {room.RoomNumber} \nRum type: {room.RoomType}");
             }
-
         }
 
-        public void ShowCliniciansAssignedBirths(string id)
+        public void ShowCliniciansAssignedBirths()
         {
-            Birth birth = _birthClinicPlanningService.Births.Find(Builders<Birth>.Filter.Where(b => b.BirthId == id)).Single();
+
+            List<Birth> list = PrintAllBirths();
+
+            Console.WriteLine();
+            Console.WriteLine("Indtast fødsels nummer:");
+            int number = int.Parse(Console.ReadLine());
+
+            Birth birth = _birthClinicPlanningService.Births.Find(Builders<Birth>.Filter.Where(b => b.BirthId == list.ElementAt(number).BirthId)).Single();
 
             foreach (var objectId in birth.EmployeeList)
             {
@@ -213,6 +220,22 @@ namespace BirthClinicPlanningMongo
         private Room FindRoomById(ObjectId roomId)
         {
             return _birthClinicPlanningService.Rooms.Find(Builders<Room>.Filter.Where(r => r.RoomId == roomId.ToString())).Single();
+        }
+
+        private List<Birth> PrintAllBirths()
+        {
+            List<Birth> birthList = _birthClinicPlanningService.Births.Find(Builders<Birth>.Filter.Empty).ToList();
+
+            int counter = 0;
+
+            foreach (var birth in birthList)
+            {
+                Console.WriteLine($"Fødsels nummer {counter}");
+                Console.WriteLine($"Id: {birth.BirthId}");
+                counter++;
+            }
+
+            return birthList;
         }
     }
 }

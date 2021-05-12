@@ -15,9 +15,6 @@ namespace BirthClinicPlanningMongo.Models.Relatives
             FullName = name;
         }
 
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string RelativesId { get; set; }
         public string FullName { get; set; }
         public string Relation { get; set; }
         public string CPRNumber { get; set; }

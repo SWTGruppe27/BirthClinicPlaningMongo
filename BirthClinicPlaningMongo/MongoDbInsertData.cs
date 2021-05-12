@@ -47,7 +47,7 @@ namespace BirthClinicPlanningMongo
 
             while (notDone)
             {
-                Console.WriteLine("Tryk enter for at gå videre og 'e' for at afslutte");
+                Console.WriteLine("Tryk enter for at vælge personale eller 'e' for at afslutte");
                 if (Console.ReadKey().Key != ConsoleKey.E)
                 {
                     Console.WriteLine($"Vælg et ledig personale: ");
@@ -57,7 +57,7 @@ namespace BirthClinicPlanningMongo
 
                     foreach (var employee in eml)
                     {
-                        Console.WriteLine($"id: {employee.EmployeeId} navn: {employee.FullName}");
+                        Console.WriteLine($"id: {employee.EmployeeNumber} navn: {employee.FullName}");
                     }
 
                     Console.WriteLine("Indtast et Id på et ledig personale");
@@ -76,28 +76,54 @@ namespace BirthClinicPlanningMongo
                 }
             }
 
-            Console.WriteLine("Indtast m for mor og f for far");
-            Relatives r1;
+            List<Relatives> relativesList = new List<Relatives>();
 
-            string choice = Console.ReadLine();
 
-            switch (choice)
+            bool notdone1 = true;
+
+            while (notdone1)
             {
-                case "m":
+                Console.WriteLine("\nTryk enter for at tilføje familiemedlemmer til fødslen eller 'e' for at afslutte");
+
+                if (Console.ReadKey().Key != ConsoleKey.E)
+                {
+                    Relatives r1;
+
+                    Console.WriteLine("\nIndtast m for mor, f for far eller a for familie");
+                    string choice = Console.ReadLine();
+
                     Console.WriteLine("Indtast navn:");
-                    r1 = new Mother(Console.ReadLine());
-                    break;
-                case "f":
-                    Console.WriteLine("Indtast navn:");
-                    r1 = new Father(Console.ReadLine());
-                    break;
-                default:
-                    Console.WriteLine("Indtast navn:");
-                    r1 = new Family(Console.ReadLine());
-                    break;
+                    string name = Console.ReadLine();
+
+                    switch (choice)
+                    {
+                        case "m":
+                            r1 = new Mother(name);
+                            break;
+                        case "f":
+                            r1 = new Father(name);
+                            break;
+                        case "a":
+                            r1 = new Family(name);
+                            break;
+                        default:
+
+                            r1 = new Family(name);
+                            break;
+                    }
+
+                    relativesList.Add(r1);
+                }
+                else
+                {
+                    notdone1 = false;
+                }
             }
 
-            newBirth.RelativesList.Add(r1);
+            foreach (var relatives in relativesList)
+            {
+                newBirth.RelativesList.Add(relatives);
+            }
 
             _birthClinicPlanningService.Births.InsertOne(newBirth);
         }
@@ -170,23 +196,21 @@ namespace BirthClinicPlanningMongo
 
             room.ReservationList.Add(newReservation);
 
-            Console.WriteLine("Vælg et fødselsId som skal have en reservation");
+            Console.WriteLine();
 
-            var birthList = _birthClinicPlanningService.Births.Find(Builders<Birth>.Filter.Empty).ToList();
+            List<Birth> list = PrintAllBirths();
 
-            foreach (var birth in birthList)
-            {
-                Console.WriteLine($"Id: {birth.BirthId}");
-            }
+            Console.WriteLine("Vælg et fødselsnummer som skal have en reservation");
 
-            string id = Console.ReadLine();
+            Console.WriteLine("\nIndtast fødselsnummer:");
+            int number = int.Parse(Console.ReadLine());
 
-            var filterBirth = Builders<Birth>.Filter.Where(b => b.BirthId == id);
+            var filterBirth = Builders<Birth>.Filter.Where(b => b.BirthId == list.ElementAt(number).BirthId);
 
             var updateBirth = Builders<Birth>.Update.Push(r => r.ReservedRooms, ObjectId.Parse(room.RoomId));
 
             _birthClinicPlanningService.Births.UpdateOne(filterBirth, updateBirth);
-            
+
             var update = Builders<Room>.Update.Push(r => r.ReservationList, newReservation);
 
             _birthClinicPlanningService.Rooms.UpdateOne(filterRooms, update);
@@ -214,6 +238,22 @@ namespace BirthClinicPlanningMongo
 
 
             return listOfRooms;
+        }
+
+        private List<Birth> PrintAllBirths()
+        {
+            List<Birth> birthList = _birthClinicPlanningService.Births.Find(Builders<Birth>.Filter.Empty).ToList();
+
+            int counter = 0;
+
+            foreach (var birth in birthList)
+            {
+                Console.WriteLine($"Fødsels nummer {counter}");
+                Console.WriteLine($"Id: {birth.BirthId}");
+                counter++;
+            }
+
+            return birthList;
         }
     }
 }
