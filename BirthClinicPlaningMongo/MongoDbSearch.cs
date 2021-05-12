@@ -156,7 +156,7 @@ namespace BirthClinicPlanningMongo
                                     {
                                         foreach (var child in birth.ChildList)
                                         {
-                                            Console.WriteLine($"Barn Id: {child.ChildId} " +
+                                            Console.WriteLine($"Barn Cprnummer: {child.CprNumber} " +
                                                               $"\nCpr nummer: { child.CprNumber}");
                                         }
 
